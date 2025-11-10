@@ -638,5 +638,5 @@ PlayerSettings:
   projectName: Fit in the hole final
   organizationId: unity_bvd4kgi9juqxag
   cloudEnabled: 0
-  enableNativePlatformBackendsForNewInputSystem: 0
-  disableOldInputManagerSupport: 0
+  enableNativePlatformBackendsForNewInputSystem: 1
+  disableOldInputManagerSupport: 1
