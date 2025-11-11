@@ -1,32 +1,52 @@
-﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-//Change Main Camera color 
+[RequireComponent(typeof(Camera))]
+public class CameraColor : MonoBehaviour
+{
+    [SerializeField]
+    private Color[] palette = { Color.black, Color.white };
 
-public class CameraColor : MonoBehaviour {
+    [SerializeField]
+    [Min(0f)]
+    private float changeInterval = 2f;
 
-    public Color[] colors;
-    private Camera mainCam;
+    private Camera targetCamera;
+    private float elapsedTime;
+    private int currentIndex;
 
-    private int c = 1;
-    public GameManager gm;
-
-	// Use this for initialization
-	void Start ()
+    private void Awake()
     {
-        mainCam = GetComponent<Camera>();
+        targetCamera = GetComponent<Camera>();
 
-    }
-	
-	// Update is called once per frame
-	void Update ()
-    {
-        if(gm.score >= c * 5)
+        if (palette == null || palette.Length == 0)
         {
-            int randColor = Random.Range(0, colors.Length);
-            mainCam.backgroundColor = colors[randColor];
-            c++;
+            palette = new[] { targetCamera.backgroundColor };
         }
-	}
+
+        ApplyColor(0);
+    }
+
+    private void Update()
+    {
+        if (palette.Length <= 1 || changeInterval <= 0f)
+        {
+            return;
+        }
+
+        elapsedTime += Time.deltaTime;
+        if (elapsedTime < changeInterval)
+        {
+            return;
+        }
+
+        elapsedTime = 0f;
+        var nextIndex = (currentIndex + 1) % palette.Length;
+        ApplyColor(nextIndex);
+    }
+
+    private void ApplyColor(int paletteIndex)
+    {
+        currentIndex = paletteIndex;
+        targetCamera.backgroundColor = palette[currentIndex];
+    }
 }
